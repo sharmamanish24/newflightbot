@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/51994357-9bb2-4b92-b732-1b0a2afda1a7/resourceGroups/centralindia/providers/Microsoft.Web/sites/newflightbot",
+  "appService.deploySubpath": "."
+}

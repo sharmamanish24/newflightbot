@@ -20,6 +20,7 @@
         "botbuilder": "~4.11.1",
         "botbuilder-ai": "~4.11.1",
         "botbuilder-azure": "~4.11.1",
+        "botbuilder-azure-blobs": "^4.14.1-preview",
         "botbuilder-core": "~4.11.1",
         "botbuilder-dialogs": "~4.11.1",
         "botbuilder-handoff": "^0.2.0",

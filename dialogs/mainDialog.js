@@ -83,7 +83,7 @@ class MainDialog extends ComponentDialog {
 
         const conversationId = stepContext.context.activity.conversation.id;
         const channelId = stepContext.context.activity.channelId;   
-        await this.transcriptStore.getTranscriptActivities(channelId, conversationId);     
+        // await this.transcriptStore.getTranscriptActivities(channelId, conversationId);     
 
         if (!this.luisRecognizer.isConfigured) {
             // LUIS is not configured, we just run the BookingDialog path.
@@ -119,38 +119,30 @@ class MainDialog extends ComponentDialog {
             }
 
             case 'TransferCall': {
-                await this.transcriptStore.logActivity(stepContext.context.activity);
+                // await this.transcriptStore.logActivity(stepContext.context.activity);
 
                 const responseText = `Please wait, while I am transferring your call to an agent with DialogId:${uuidV4}`;
 
                 const conversationId = stepContext.context.activity.conversation.id;
                 const channelId = stepContext.context.activity.channelId;
-                // let continuationToken = '';
+                let continuationToken = '';
 
                 var pagedResult = await this.transcriptStore.getTranscriptActivities(channelId, conversationId);
 
-                console.log("MANISH SHARMA \n" + JSON.stringify(pagedResult.items));
+                // console.log("MANISH SHARMA \n" + JSON.stringify(pagedResult.items));
 
                 const result = pagedResult.items.filter(item => !item.attachments && item.type == ActivityTypes.Message);
-                const mactivites = result.map(item => { return { "text": item.text }; });
+                //const mactivites = result.map(item => { return { "text": item.text }; });
 
-                
-                const transcript = { activities: mactivites };
+                const transcript = { activities: result };
 
                 // console.log("MANISH SHARMA \n" + JSON.stringify(mactivites));
                 const handoffEvent = EventFactory.createHandoffInitiation(stepContext.context, { "skill": "agent" }, transcript);
 
-                console.log("MANISH SHARMA \n" + JSON.stringify(mactivites));
-                // var mattachment = { contentType : "application/json",
-                //                     content: {activities: mactivites},
-                //                     name: "transcriptHandOff",
-                //                 };
-                // await stepContext.context.sendActivity({ attachments: [mattachment], text: responseText });
                 await stepContext.context.sendActivity(handoffEvent);
                 // console.log("MANISH SHARMA \n" + JSON.stringify(op));
 
                 return await stepContext.endDialog();
-                // insertDataTataDb("bot", 'What else can I do for you?');
                 break;
             }
             default: {

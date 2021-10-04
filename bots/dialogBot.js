@@ -4,7 +4,7 @@
 const { ActivityHandler } = require('botbuilder');
 
 // The accessor names for the conversation data and user profile state property accessors.
-const CONVERSATION_DATA_PROPERTY = 'conversationData';
+const CONVERSATION_DATA_PROPERTY = 'dialogState';
 const USER_PROFILE_PROPERTY = 'userProfile';
 class DialogBot extends ActivityHandler {
     /**
@@ -37,7 +37,6 @@ class DialogBot extends ActivityHandler {
             await next();
         });
     }
-
 
     /**
      * Override the ActivityHandler.run() method to save state changes after the bot logic completes.

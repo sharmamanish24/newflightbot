@@ -16,6 +16,7 @@ const restify = require('restify');
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
 const { BotFrameworkAdapter, InputHints } = require('botbuilder');
 const { ConversationState, UserState } = require('botbuilder-core');
+const { BlobsStorage, BlobsTranscriptStore } = require('botbuilder-azure-blobs');
 const { BlobStorage, AzureBlobTranscriptStore } = require('botbuilder-azure');
 const { MemoryStorage, MemoryTranscriptStore, TranscriptLoggerMiddleware } = require('botbuilder-core');
 const { FlightBookingRecognizer } = require('./dialogs/flightBookingRecognizer');
@@ -70,20 +71,15 @@ adapter.onTurnError = onTurnErrorHandler;
 // CAUTION: The Memory Storage used here is for local bot debugging only. When the bot
 // is restarted, anything stored in memory will be gone.
 // const myDbStorage = new MemoryStorage();
-const myDbStorage = new BlobStorage({
-    containerName: process.env.BlobContainerName,
-    storageAccountOrConnectionString: process.env.BlobConnectionString
-});
+
+const myDbStorage = new BlobsStorage(process.env.BlobConnectionString, process.env.BlobContainerName);
 
 const conversationState = new ConversationState(myDbStorage);
 const userState = new UserState(myDbStorage);
 
 // The transcript store has methods for saving and retrieving bot conversation transcripts.
 // const transcriptStore = new MemoryTranscriptStore();
-const transcriptStore = new AzureBlobTranscriptStore({
-    containerName: process.env.BlobContainerName,
-    storageAccountOrConnectionString: process.env.BlobConnectionString
-});
+const transcriptStore = new BlobsTranscriptStore(process.env.BlobConnectionString, process.env.BlobContainerName);
 
 // // Create the middleware layer responsible for logging incoming and outgoing activities
 // // into the transcript store.
